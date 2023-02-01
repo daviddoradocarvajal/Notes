@@ -17,37 +17,58 @@ const Note = ({ data, setNotes, notes }: NotePropsType) => {
   const [title, setTitle] = useState<any>(data.titulo);
   const [description, setDescription] = useState<any>(data.descripcion);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setLoading(true);
 
-    setTimeout(() => {
-      notification({
-        title: "Success",
-        description: "Note deleted successfully.",
-        status: "success",
-        position: "top",
-      });
+    await fetch("http://localhost:8085/Notes/mvc/deleteNote", {
+      method: "POST",
+      body: String(data.id),
+    });
 
-      setLoading(false);
-    }, 200);
+    const newNotes: any = notes.filter((note) => note.id !== data.id);
+
+    if (newNotes.length > 0) {
+      setNotes(newNotes);
+    } else {
+      setNotes([]);
+    }
+
+    setLoading(false);
+    notification({
+      title: "Success",
+      description: "Note deleted successfully.",
+      status: "success",
+      position: "top",
+    });
   };
 
   const handleUpdate = () => {
     setEditMode(false);
-    console.log(title);
-    console.log(description);
   };
 
-  const handleFavorite = () => {
-    const newNotes = notes
-      .map((note) => {
-        if (note.id === data.id) {
-          return { ...note, isFavorite: !note.isFavorite };
-        }
-        return note;
-      })
-      .sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite));
+  const handleFavorite = async () => {
+    setLoading(true);
+    await fetch("http://localhost:8085/Notes/mvc/switchNoteFavorite", {
+      method: "POST",
+      body: String(data.id),
+    });
+
+    const newNotes = notes.map((note) => {
+      if (note.id === data.id) {
+        return { ...note, isFavorite: !note.isFavorite };
+      }
+      return note;
+    });
+
     setNotes(newNotes);
+
+    setLoading(false);
+    notification({
+      title: "Success",
+      description: "Note marked as favorite successfully.",
+      status: "success",
+      position: "top",
+    });
   };
 
   const handleEdit = () => {
@@ -177,6 +198,8 @@ const Note = ({ data, setNotes, notes }: NotePropsType) => {
       </>
     );
   }
+
+  return <></>;
 };
 
 export default Note;
