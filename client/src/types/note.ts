@@ -1,7 +1,7 @@
 export type NoteType = {
   id: number;
-  title: string;
-  description: string;
+  titulo: string;
+  descripcion: string;
   isFavorite: boolean;
-  createdAt: Date;
+  timestamp: number[];
 };

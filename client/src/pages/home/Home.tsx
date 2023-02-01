@@ -1,27 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import Note from "../../components/Note";
-import { NoteType } from "../../types";
+import { NoteType, RouterContextType } from "../../types";
 
 const Home = () => {
-  let notesDefault: NoteType[] = [
-    {
-      id: 1,
-      title: "Learn Spring Boot",
-      description:
-        "This note is an example to lear spring boot blah blah i don't know what else to say here",
-      createdAt: new Date(),
-      isFavorite: true,
-    },
-    {
-      id: 2,
-      title: "Code this app",
-      description: "Simple, just finish this app",
-      createdAt: new Date(),
-      isFavorite: false,
-    },
-  ];
+  const [notes, setNotes] = useState<NoteType[]>([]);
+  const { setLoading } = useOutletContext<RouterContextType>();
 
-  const [notes, setNotes] = useState<NoteType[]>(notesDefault);
+  const loadNotes = async () => {
+    return fetch("http://localhost:8085/Notes/mvc/listNotes").then((data) =>
+      data.json()
+    );
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    loadNotes().then((res) => {
+      setNotes(res);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <div className="flex flex-wrap gap-x-6">
