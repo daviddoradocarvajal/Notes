@@ -12,7 +12,7 @@ function App() {
       <div className="bg-slate-800 h-screen text-white">
         <Header />
         <div className="container mx-auto ">
-          <Outlet context={{ setLoading }} />
+          <Outlet context={{ setLoading, loading }} />
         </div>
       </div>
     </>
