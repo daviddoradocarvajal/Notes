@@ -21,15 +21,32 @@ const Home = () => {
     });
   }, []);
 
-  return (
-    <div className="flex flex-wrap gap-x-6">
-      {notes.map((note: NoteType) => {
-        return (
-          <Note key={note.id} data={note} setNotes={setNotes} notes={notes} />
-        );
-      })}
-    </div>
-  );
+  if (!notes || notes.length <= 0) {
+    return (
+      <div className="flex flex-wrap gap-x-6">
+        You have no notes 😟, start by creating a new note 📝 !
+      </div>
+    );
+  }
+
+  if (notes.length > 0) {
+    return (
+      <>
+        <div className="flex flex-wrap gap-x-6">
+          {notes.map((note: NoteType) => {
+            return (
+              <Note
+                key={note.id}
+                data={note}
+                setNotes={setNotes}
+                notes={notes}
+              />
+            );
+          })}
+        </div>
+      </>
+    );
+  }
 };
 
 export default Home;

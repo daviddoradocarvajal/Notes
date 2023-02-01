@@ -180,7 +180,7 @@ const Note = ({ data, setNotes, notes }: NotePropsType) => {
               <div>
                 <div className="flex items-center justify-between text-gray-800">
                   <p className="text-md mt-4">
-                    <b>{data.timestamp}</b>
+                    <b>📅 {data.timestamp}</b>
                   </p>
                 </div>
               </div>
