@@ -55,6 +55,7 @@ public class NotesController {
 	@PostMapping(path = "/modifyNote", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
 	public ResponseEntity<?> modifyNote(@RequestBody String json) {
 		Note note = jsonNoteReturner(json);		
+		note.setTimestamp(LocalDateTime.now());
 		noteService.modify(note);
 		String jsonStr = jsonTransformer(note);
 		return ResponseEntity.ok(jsonStr);

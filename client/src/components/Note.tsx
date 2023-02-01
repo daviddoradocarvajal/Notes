@@ -42,7 +42,42 @@ const Note = ({ data, setNotes, notes }: NotePropsType) => {
     });
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
+    setLoading(true);
+    await fetch("http://localhost:8085/Notes/mvc/modifyNote", {
+      method: "POST",
+      body: JSON.stringify({
+        id: data.id,
+        titulo: title,
+        descripcion: description,
+        isFavorite: data.isFavorite,
+      }),
+    });
+
+    const newNotes: any = notes.map((note) => {
+      if (note.id === data.id) {
+        return {
+          id: data.id,
+          titulo: title,
+          descripcion: description,
+          isFavorite: data.isFavorite,
+          timestamp: data.timestamp,
+        };
+      }
+      return note;
+    });
+
+    notification({
+      title: "Success",
+      description: "Note updated successfully.",
+      status: "success",
+      position: "top",
+    });
+
+    setNotes(newNotes);
+
+    setLoading(false);
+
     setEditMode(false);
   };
 
@@ -71,7 +106,7 @@ const Note = ({ data, setNotes, notes }: NotePropsType) => {
     });
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     setEditMode(true);
   };
 
@@ -145,10 +180,7 @@ const Note = ({ data, setNotes, notes }: NotePropsType) => {
               <div>
                 <div className="flex items-center justify-between text-gray-800">
                   <p className="text-md mt-4">
-                    <b>
-                      {data.timestamp[2]}/{data.timestamp[1]}/
-                      {data.timestamp[0]}
-                    </b>
+                    <b>{data.timestamp}</b>
                   </p>
                 </div>
               </div>
