@@ -11,20 +11,28 @@ import com.indra.notes.persistence.NoteRepository;
 public class GestorNote {
 	@Autowired
 	private NoteRepository noteRepository;
-	
-	
+
 	@Transactional
 	public void insert(Note note) {
 		noteRepository.save(note);
 	}
-	
+
 	@Transactional
-	public void modificar(Note note) {		
+	public void modify(Note note) {
 		noteRepository.save(note);
 	}
-	
+
 	@Transactional
-	public void borrar(Note note) {
+	public void delete(Integer id) {
+		Note note = noteRepository.getOne(id);
 		noteRepository.delete(note);
+	}
+
+	@Transactional
+	public void switchFavorite(Integer id) {
+		Note note = noteRepository.getOne(id);
+		noteRepository.switchFavorite(!note.getIsFavorite(), note.getId()); 
+		
+		
 	}
 }
