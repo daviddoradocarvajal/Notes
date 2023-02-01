@@ -3,15 +3,14 @@ package com.indra.notes.controller;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,25 +35,42 @@ public class NotesController {
 	@GetMapping(path = "/listNotes", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
 	public ResponseEntity<?> listNotes() {
 		System.out.println("POR AQUI");
-		List<Note> noteList = noteRepository.findAll();
-		var note = new Note();
-
-		note.setId(1);
-		note.setDescripcion("test");
-		note.setIsFavorite(true);
-		note.setTitulo("dasdas");
-		note.setTimestamp(LocalDateTime.now());
-
-		//String jsonStr = jsonTransformer(note);
+		List<Note> noteList = noteRepository.findAll();		
 		String listString = writeListToJsonArray(noteList);
 		return ResponseEntity.ok(listString);
 
 	}
+	
+	@PostMapping(path = "/insertNote", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+	public ResponseEntity<?> insertNote(@RequestBody String json) {		
+		Note note = jsonNoteReturner(json);
+		note.setTimestamp(LocalDateTime.now());		
+		noteService.insert(note);
+		String jsonStr = jsonTransformer(note);
+		return ResponseEntity.ok(jsonStr);
+	}
+	@PostMapping(path = "/modifyNote", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+	public ResponseEntity<?> modifyNote(@RequestBody String json) {
+		Note note = jsonNoteReturner(json);		
+		noteService.modify(note);
+		String jsonStr = jsonTransformer(note);
+		return ResponseEntity.ok(jsonStr);
+	}
+	@PostMapping(path = "/deleteNote", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+	public ResponseEntity<?> deleteNote(@RequestBody String id) {
+		Integer idToDelete = Integer.valueOf(id);		
+		noteService.delete(idToDelete);		
+		return ResponseEntity.ok("deleted");
+	}
+	@PostMapping(path = "/switchNoteFavorite", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+	public ResponseEntity<?> switchNoteFavorite(@RequestBody String id) {
+		Integer idToSwitch = Integer.valueOf(id);
+		noteService.switchFavorite(idToSwitch);
+		return ResponseEntity.ok("ok");
+	}
+	
 
-	public static String writeListToJsonArray(List<Note> list) {
-
-		// your list
-
+	private static String writeListToJsonArray(List<Note> list) {
 		try {
 			final StringWriter sw = new StringWriter();
 			final ObjectMapper mapper = new ObjectMapper();
@@ -64,7 +80,6 @@ public class NotesController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			// sw.close();
 			return "";
 		}
 
@@ -76,10 +91,24 @@ public class NotesController {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
-			jsonStr = obj.writeValueAsString(object);
+			jsonStr = obj.writeValueAsString(object);			
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		return jsonStr;
+	}
+	
+	private static Note jsonNoteReturner(String json) {	
+
+		try {
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Note note = obj.readValue(json, Note.class);			
+			return note;
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+		
 	}
 }

@@ -1,5 +1,5 @@
 /target/
-./target
+target/
 logs
 *.log
 npm-debug.log*
