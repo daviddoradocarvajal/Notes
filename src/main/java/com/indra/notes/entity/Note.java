@@ -47,7 +47,16 @@ public class Note {
 	}
 	public void setIsFavorite(Boolean isFavorite) {
 		this.isFavorite = isFavorite;
-	}	
-	
-	
+	}
+
+	@Override
+	public String toString() {
+		return "{"
+				+ "\"id\": "+id+",\n"
+				+ "\"titulo\": "+"\""+titulo+"\""+",\n"
+				+ "\"descripcion\": "+"\""+descripcion+"\""+",\n"
+				+ "\"timestamp\": "+"\""+timestamp.toString()+"\""+",\n"
+				+ "\"isFavorite\": "+isFavorite+",\n"
+				+ "}";
+	}
 }
