@@ -1,7 +1,10 @@
 package com.indra.notes.controller;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,41 +22,64 @@ import com.indra.notes.persistence.NoteRepository;
 
 @RestController
 public class NotesController {
-	
+
 	@Autowired
 	GestorNote noteService;
-	
+
 	@Autowired
 	NoteRepository noteRepository;
-	
+
 	public NotesController() {
 		System.out.println("Creando controller");
 	}
 
-	
-	@GetMapping(path ="/listNotes", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+	@GetMapping(path = "/listNotes", headers = "Accept=*/*", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
 	public ResponseEntity<?> listNotes() {
 		System.out.println("POR AQUI");
+		List<Note> noteList = noteRepository.findAll();
 		var note = new Note();
-		
+
 		note.setId(1);
 		note.setDescripcion("test");
 		note.setIsFavorite(true);
 		note.setTitulo("dasdas");
 		note.setTimestamp(LocalDateTime.now());
-	
+
+		//String jsonStr = jsonTransformer(note);
+		String listString = writeListToJsonArray(noteList);
+		return ResponseEntity.ok(listString);
+
+	}
+
+	public static String writeListToJsonArray(List<Note> list) {
+
+		// your list
+
+		try {
+			final StringWriter sw = new StringWriter();
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JavaTimeModule());
+			mapper.writeValue(sw, list);
+			return sw.toString();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// sw.close();
+			return "";
+		}
+
+	}
+
+	private static String jsonTransformer(Object object) {
 		String jsonStr = "";
-		
+
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
-			 jsonStr = obj.writeValueAsString(note);
-			
-		}catch(IOException ex) {
+			jsonStr = obj.writeValueAsString(object);
+		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		
-		return ResponseEntity.ok(jsonStr);
-		
+		return jsonStr;
 	}
-} 
+}

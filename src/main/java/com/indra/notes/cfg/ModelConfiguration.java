@@ -26,7 +26,7 @@ public class ModelConfiguration {
 		System.out.println("Instancia de datasource");
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		ds.setUrl("jdbc:mysql://localhost:3307/notesDB?createDatabaseIfNotExist=true");
+		ds.setUrl("jdbc:mysql://localhost:3306/notesDB?createDatabaseIfNotExist=true");
 		ds.setUsername("root");
 		ds.setPassword("root");
 		return ds;

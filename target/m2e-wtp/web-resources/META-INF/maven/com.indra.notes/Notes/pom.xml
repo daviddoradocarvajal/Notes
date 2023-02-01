@@ -58,32 +58,20 @@
 			<artifactId>spring-data-jpa</artifactId>
 			<version>2.4.5</version>
 		</dependency>
-<<<<<<< HEAD
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.12.1</version>
 		</dependency>
-		
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 			<version>2.12.1</version>
 		</dependency>
-		
-		
-	<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>8.0.28</version>
-=======
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.28</version>
->>>>>>> 98b5464a4cd11ba655c87d456c51ddcb0f9aeb5f
 		</dependency>
 	</dependencies>
 </project>
