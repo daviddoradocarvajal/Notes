@@ -26,10 +26,10 @@ public class ModelConfiguration {
 		System.out.println("Instancia de datasource");
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		ds.setUrl("jdbc:mysql://localhost:3306/notesDB?createDatabaseIfNotExist=true");
+		ds.setUrl("jdbc:mysql://localhost:3307/notesDB?createDatabaseIfNotExist=true");
 		ds.setUsername("root");
 		ds.setPassword("root");
-		return ds;
+		return ds; 
 	}
 
 	@Bean
@@ -43,7 +43,7 @@ public class ModelConfiguration {
 		jpaProperties.put("hibernate.hbm2ddl.auto", "update");
 		jpaProperties.put("hibernate.show_sql", "true");
 		jpaProperties.put("hibernate.format_sql", "false");
-		entityManagerFactoryBean.setJpaProperties(jpaProperties);
+		entityManagerFactoryBean.setJpaProperties(jpaProperties); 
 		return entityManagerFactoryBean;
 	}
 
