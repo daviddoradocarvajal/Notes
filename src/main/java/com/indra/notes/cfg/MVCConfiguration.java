@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-@ComponentScan(basePackages  = "com.indra.notes.controller")
+@ComponentScan(basePackages = "com.indra.notes.controller")
 @Configuration
 public class MVCConfiguration {	
 	
